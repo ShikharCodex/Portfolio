@@ -82,7 +82,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/70" />
 
       {/* MAIN CONTAINER */}
-      <div className="relative z-10 h-full min-h-screen mt-10 flex flex-col justify-between">
+      <div className="relative z-10 h-full min-h-screen flex flex-col justify-between">
         <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 py-16 flex flex-col justify-between h-full min-h-screen">
           {/* TOP SECTION */}
           <div className="flex-1 flex flex-col justify-center">

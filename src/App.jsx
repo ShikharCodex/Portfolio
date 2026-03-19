@@ -31,11 +31,11 @@ function App() {
     <div className="bg-[#030303] min-h-screen">
       <Navbar />
       <Hero />
-      <Rift />
       <About />
       <Process />
       
       <Skills />
+      <Rift />
       <Focus />
 
       <Projects />
