@@ -236,7 +236,7 @@ const projects = [
     description: "A modern reimagining Chat Application.",
     tech: ["Socket.io", "Node", "Express", "MongoDB", "React"],
     hex: "#0f0",
-    link: "https://xchat-ei43.onrender.com/",
+    link: "https://chatx-lquz.onrender.com/",
     innerAnim: "particles",
   },
   {
@@ -254,7 +254,7 @@ const projects = [
       "Rate Limiting Algorithm",
     ],
     hex: "#a855f7",
-    link: "#",
+    link: "https://rooter-37q2.onrender.com/",
     innerAnim: "radar",
   },
   {
