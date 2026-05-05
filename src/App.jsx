@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import About from "./components/About";
 import Sandbox from "./components/Sandbox";
 import Focus from "./components/Focus";
+import LanguageSection from "./components/Language";
 
 function App() {
   useEffect(() => {
@@ -33,16 +34,17 @@ function App() {
       <Hero />
       <About />
       <Process />
-      
+
       <Skills />
       <Rift />
       <Focus />
 
       <Projects />
+      <LanguageSection />
       {/* <Sandbox/> */}
 
       <Vault />
-      
+
       <Playground />
       <Footer />
     </div>
