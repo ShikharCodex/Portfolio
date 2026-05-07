@@ -13,6 +13,7 @@ import About from "./components/About";
 import Sandbox from "./components/Sandbox";
 import Focus from "./components/Focus";
 import LanguageSection from "./components/Language";
+import Max from "./components/Max";
 
 function App() {
   useEffect(() => {
@@ -33,6 +34,7 @@ function App() {
       <Navbar />
       <Hero />
       <About />
+      <Max />
       <Process />
 
       <Skills />

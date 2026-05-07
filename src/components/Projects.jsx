@@ -279,6 +279,28 @@ const projects = [
     link: "https://www.shikharx.xyz/",
     innerAnim: "blocks",
   },
+  {
+    id: "09",
+    title: "MedExplain / Mediva",
+    category: "Medical AI Analyzer",
+    description:
+      "An advanced AI clinical assistant that interprets symptoms, labs, and imaging data to deliver preliminary diagnostics and triage recommendations.",
+    tech: ["React", "NextJS", "Node", "MongoDB", "Cloudinary", "OpenAI"],
+    hex: "#14b8a6",
+    link: "https://mediva-one.vercel.app/",
+    innerAnim: "grid",
+  },
+  {
+    id: "10",
+    title: "Kitchen Vision / Vizor",
+    category: "Kitchen Vision AI",
+    description:
+      "Scan your ingredients with AI‑powered computer vision and instantly receive curated recipes, nutrition breakdowns, and waste‑reducing meal plans.",
+    tech: ["OpenAI-Vision Model", "React", "NextJS", "Node", "MongoDB", "Cloudinary"],
+    hex: "#f97316",
+    link: "https://vizorai.vercel.app/",
+    innerAnim: "barcode",
+  },
 ];
 
 const ProjectCard = ({ project, index }) => {
@@ -345,7 +367,9 @@ const ProjectCard = ({ project, index }) => {
       </div>
 
       <div
-        className={`w-full max-w-[95rem] mx-auto flex flex-col md:flex-row ${index % 2 === 0 ? "" : "md:flex-row-reverse"} items-center gap-10 md:gap-14 lg:gap-28`}
+        className={`w-full max-w-[95rem] mx-auto flex flex-col md:flex-row ${
+          index % 2 === 0 ? "" : "md:flex-row-reverse"
+        } items-center gap-10 md:gap-14 lg:gap-28`}
       >
         {/* TEXT SECTION */}
         <motion.div
