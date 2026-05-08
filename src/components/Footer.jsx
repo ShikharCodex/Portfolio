@@ -220,6 +220,7 @@ export default function SpatialHUDFooter() {
               {time}
             </span>
             <span>© {new Date().getFullYear()} Shikharx v0.1</span>
+            <span><a href="https://shikharx2.vercel.app/" target="_blank">v2.0.1 [on Working]</a></span>
           </div>
         </div>
       </div>

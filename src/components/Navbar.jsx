@@ -110,12 +110,14 @@ export default function Navbar() {
           {/* Connect Button (Desktop) & Hamburger (Mobile) */}
           <div className="flex items-center gap-4 z-50">
             <a
-              href="#contact"
-              onClick={(e) => handleSmoothScroll(e, "#contact")} // Apply custom scroll here
+              href="https://shikharx2.vercel.app/"
+              target="_blank"
               className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-xs font-bold uppercase tracking-widest text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(34,211,238,0.15)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] cursor-pointer"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse hidden lg:block" />
-              {/* <a href="https://github.com/ShikharBit">Github</a> */}
+              <a href="https://shikharx2.vercel.app/" target="_blank">
+                version 2.0.1 [on Working]
+              </a>
             </a>
 
             <button
