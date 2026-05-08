@@ -1,0 +1,47 @@
+SHIKHAR
+Full-Stack Product Engineer
+
+Location: Kanpur, India
+Email: hello@shikharx.xyz
+GitHub: https://github.com/ShikharBit
+Portfolio: https://www.shikharx.xyz/
+
+SUMMARY
+Full-stack product engineer focused on premium React interfaces, Node.js APIs,
+AI product workflows, realtime systems, and production-minded user experience.
+Builds clean, responsive, animated products with a strong bias toward shipping.
+
+CORE STACK
+React, JavaScript, Vite, Tailwind CSS, Framer Motion, GSAP, Lenis, Three.js,
+Node.js, Express, MongoDB, Redis, Socket.io, Cloudinary, OpenAI, Zod, Git.
+
+PROJECTS
+CodeMesh
+Fast developer code-sharing platform with React, Node.js, Express, and MongoDB.
+
+Elariax
+Customizable AI companion concept with learning loops, examination flows, and
+identity-driven interaction design.
+
+Mediva
+Medical AI explanation prototype focused on cautious triage-style outputs,
+symptom/lab interpretation, and upload-driven workflows.
+
+Vizor
+Vision AI kitchen assistant that turns ingredient scans into recipes, nutrition
+context, and waste-conscious meal planning.
+
+Locofy
+Community-powered lost-and-found database with media-backed reports and public
+discovery surfaces.
+
+Rooter
+Productivity note app with Express APIs, MongoDB persistence, and Redis-backed
+rate limiting.
+
+ENGINEERING SIGNALS
+- Builds multi-page React applications with reusable component architecture.
+- Designs APIs and data models with maintainability and future constraints in mind.
+- Treats motion, validation, accessibility, responsiveness, and failure states as
+  first-class product concerns.
+- Focused on AI interface quality, safe product framing, and structured outputs.
