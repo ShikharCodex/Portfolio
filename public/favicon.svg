@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1024" height="1024">
 <path d="M0 0 C337.92 0 675.84 0 1024 0 C1024 337.92 1024 675.84 1024 1024 C686.08 1024 348.16 1024 0 1024 C0 686.08 0 348.16 0 0 Z " fill="#1C1A1A" transform="translate(0,0)"/>
@@ -5636,4 +5637,10 @@
 <path d="M0 0 C2.31 0 4.62 0 7 0 C5.625 2 5.625 2 4 4 C3.34 4 2.68 4 2 4 C1.34 2.68 0.68 1.36 0 0 Z " fill="#342D2A" transform="translate(593,19)"/>
 <path d="M0 0 C0.598125 0.226875 1.19625 0.45375 1.8125 0.6875 C-0.1675 1.6775 -0.1675 1.6775 -2.1875 2.6875 C-2.1875 3.3475 -2.1875 4.0075 -2.1875 4.6875 C-3.1775 5.0175 -4.1675 5.3475 -5.1875 5.6875 C-5.1875 2.6875 -5.1875 2.6875 -3.9375 0.9375 C-2.1875 -0.3125 -2.1875 -0.3125 0 0 Z " fill="#282622" transform="translate(279.1875,20.3125)"/>
 <path d="M0 0 C2.97 0 5.94 0 9 0 C9 0.66 9 1.32 9 2 C9.66 2.33 10.32 2.66 11 3 C9.54077307 2.88590407 8.08259402 2.75834456 6.625 2.625 C5.40683594 2.52058594 5.40683594 2.52058594 4.1640625 2.4140625 C2 2 2 2 0 0 Z " fill="#39342F" transform="translate(56,19)"/>
+=======
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="6" fill="#070806"/>
+  <rect x="1" y="1" width="30" height="30" rx="5" stroke="#3ddc97" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <text x="16" y="21.5" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="15" fill="#f5f2e8">SX</text>
+>>>>>>> 4c49be3997eb32e141649200546dfc75e1d01f56
 </svg>
