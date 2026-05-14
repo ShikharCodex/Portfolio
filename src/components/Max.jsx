@@ -5,48 +5,56 @@ import {
   AnimatePresence,
   useScroll,
   useTransform,
+  useMotionValue,
+  useSpring,
 } from "framer-motion";
 
-// ========== CUSTOM DOG CURSOR (only inside this section) ==========
+// ─── CUSTOM DOG CURSOR (no re-renders, ultra‑smooth) ────────────────
 const SectionCursor = ({ containerRef }) => {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
   const [visible, setVisible] = useState(false);
   const [clicked, setClicked] = useState(false);
+
+  const springX = useSpring(mouseX, { stiffness: 500, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 500, damping: 30 });
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const handleMouseMove = (e) => {
+    const handleMove = (e) => {
       const rect = el.getBoundingClientRect();
-      setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      mouseX.set(e.clientX - rect.left - 28);
+      mouseY.set(e.clientY - rect.top - 28);
     };
-    const handleMouseEnter = () => setVisible(true);
-    const handleMouseLeave = () => setVisible(false);
-    const handleClick = () => setClicked(true);
-    const handleClickEnd = () => setTimeout(() => setClicked(false), 300);
 
-    el.addEventListener("mousemove", handleMouseMove);
-    el.addEventListener("mouseenter", handleMouseEnter);
-    el.addEventListener("mouseleave", handleMouseLeave);
-    el.addEventListener("click", handleClick);
-    el.addEventListener("click", handleClickEnd);
+    const onEnter = () => setVisible(true);
+    const onLeave = () => setVisible(false);
+    const onDown = () => setClicked(true);
+    const onUp = () => setTimeout(() => setClicked(false), 300);
+
+    el.addEventListener("mousemove", handleMove);
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+    el.addEventListener("mousedown", onDown);
+    el.addEventListener("mouseup", onUp);
 
     return () => {
-      el.removeEventListener("mousemove", handleMouseMove);
-      el.removeEventListener("mouseenter", handleMouseEnter);
-      el.removeEventListener("mouseleave", handleMouseLeave);
-      el.removeEventListener("click", handleClick);
-      el.removeEventListener("click", handleClickEnd);
+      el.removeEventListener("mousemove", handleMove);
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+      el.removeEventListener("mousedown", onDown);
+      el.removeEventListener("mouseup", onUp);
     };
-  }, [containerRef]);
+  }, [containerRef, mouseX, mouseY]);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="pointer-events-none absolute top-0 left-0 z-50"
-          style={{ x: pos.x - 28, y: pos.y - 28 }}
+          className="pointer-events-none absolute top-0 left-0 z-50 will-change-transform"
+          style={{ x: springX, y: springY, translateZ: 0 }}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
@@ -55,7 +63,7 @@ const SectionCursor = ({ containerRef }) => {
           <div
             className={`text-5xl ${clicked ? "scale-75" : "scale-100"} transition-transform duration-200`}
           >
-            🐾
+            🖐️
           </div>
         </motion.div>
       )}
@@ -63,31 +71,37 @@ const SectionCursor = ({ containerRef }) => {
   );
 };
 
-// ========== PAW PRINT TRAIL ==========
+// ─── PAW PRINT TRAIL (throttled, limited re-renders) ────────────────
 const PawTrail = ({ containerRef }) => {
   const [trail, setTrail] = useState([]);
   const lastPos = useRef({ x: 0, y: 0 });
+  const rafId = useRef(null);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+
     const handleMouseMove = (e) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const dx = x - lastPos.current.x;
-      const dy = y - lastPos.current.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist > 50) {
-        lastPos.current = { x, y };
-        const id = Date.now() + Math.random();
-        setTrail((prev) => [...prev.slice(-8), { id, x, y }]);
-        setTimeout(
-          () => setTrail((prev) => prev.filter((p) => p.id !== id)),
-          800,
-        );
-      }
+      if (rafId.current) return;
+      rafId.current = requestAnimationFrame(() => {
+        rafId.current = null;
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const dx = x - lastPos.current.x;
+        const dy = y - lastPos.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 50) {
+          lastPos.current = { x, y };
+          const id = Date.now() + Math.random();
+          setTrail((prev) => [...prev.slice(-8), { id, x, y }]);
+          setTimeout(() => {
+            setTrail((prev) => prev.filter((p) => p.id !== id));
+          }, 800);
+        }
+      });
     };
+
     el.addEventListener("mousemove", handleMouseMove);
     return () => el.removeEventListener("mousemove", handleMouseMove);
   }, [containerRef]);
@@ -98,8 +112,8 @@ const PawTrail = ({ containerRef }) => {
         {trail.map((p) => (
           <motion.div
             key={p.id}
-            className="absolute text-2xl opacity-40"
-            style={{ left: p.x, top: p.y }}
+            className="absolute text-2xl opacity-40 will-change-transform"
+            style={{ left: p.x, top: p.y, translateZ: 0 }}
             initial={{ scale: 1, opacity: 0.7 }}
             animate={{ scale: 0, opacity: 0 }}
             exit={{ opacity: 0 }}
@@ -113,10 +127,13 @@ const PawTrail = ({ containerRef }) => {
   );
 };
 
-// ========== INTERACTIVE DOG PORTRAIT ==========
+// ─── INTERACTIVE DOG PORTRAIT (motion values, no re-renders) ────────
 const DogPortrait = ({ imageSrc, containerRef }) => {
-  const [pupil, setPupil] = useState({ x: 0, y: 0 });
   const imgRef = useRef(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 200, damping: 10 });
+  const springY = useSpring(mouseY, { stiffness: 200, damping: 10 });
 
   const handleMouseMove = (e) => {
     if (!imgRef.current) return;
@@ -124,7 +141,8 @@ const DogPortrait = ({ imageSrc, containerRef }) => {
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
     const maxMove = 15;
-    setPupil({ x: x * maxMove, y: y * maxMove });
+    mouseX.set(x * maxMove);
+    mouseY.set(y * maxMove);
   };
 
   return (
@@ -141,21 +159,27 @@ const DogPortrait = ({ imageSrc, containerRef }) => {
           alt="Max My Dog"
           className="w-full h-auto object-cover aspect-[4/3] filter contrast-125 brightness-110"
         />
-        {/* Googly eyes overlay (interactive pupils) */}
+        {/* Googly eyes overlay – now driven by motion values */}
         <div className="absolute top-[28%] left-[30%] w-[8%] pt-[8%] bg-white rounded-full shadow-inner">
           <motion.div
-            className="absolute w-[60%] pt-[60%] bg-black rounded-full top-1/2 left-1/2"
-            animate={{ x: pupil.x, y: pupil.y }}
-            transition={{ type: "spring", stiffness: 200, damping: 10 }}
-            style={{ translate: "-50% -50%" }}
+            className="absolute w-[60%] pt-[60%] bg-black rounded-full top-1/2 left-1/2 will-change-transform"
+            style={{
+              x: springX,
+              y: springY,
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
           />
         </div>
         <div className="absolute top-[28%] right-[30%] w-[8%] pt-[8%] bg-white rounded-full shadow-inner">
           <motion.div
-            className="absolute w-[60%] pt-[60%] bg-black rounded-full top-1/2 left-1/2"
-            animate={{ x: pupil.x, y: pupil.y }}
-            transition={{ type: "spring", stiffness: 200, damping: 10 }}
-            style={{ translate: "-50% -50%" }}
+            className="absolute w-[60%] pt-[60%] bg-black rounded-full top-1/2 left-1/2 will-change-transform"
+            style={{
+              x: springX,
+              y: springY,
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
           />
         </div>
         {/* Corner accents */}
@@ -168,21 +192,21 @@ const DogPortrait = ({ imageSrc, containerRef }) => {
   );
 };
 
-// ========== 🆕 PET THE DOG GAME (playable, cute, unique) ==========
+// ─── PET THE DOG GAME ──────────────────────────────────────────────
 const PetTheDog = () => {
   const [happiness, setHappiness] = useState(0);
   const [hearts, setHearts] = useState([]);
   const [zoomies, setZoomies] = useState(false);
+  const [pawPop, setPawPop] = useState(false);
   const maxHappiness = 10;
 
   const petDog = () => {
-    if (zoomies) return; // wait for zoomies to finish
+    if (zoomies) return;
     const newHappiness = happiness + 1;
     setHappiness(newHappiness);
 
-    // Spawn floating hearts
     const id = Date.now() + Math.random();
-    const x = Math.random() * 200 - 100; // random horizontal spread
+    const x = Math.random() * 200 - 100;
     setHearts((prev) => [...prev, { id, x }]);
     setTimeout(
       () => setHearts((prev) => prev.filter((h) => h.id !== id)),
@@ -198,8 +222,6 @@ const PetTheDog = () => {
     }
   };
 
-  // Popping paw effect on button
-  const [pawPop, setPawPop] = useState(false);
   const handleButtonClick = () => {
     setPawPop(true);
     petDog();
@@ -225,7 +247,7 @@ const PetTheDog = () => {
         </div>
       </div>
 
-      {/* Interactive pet button with floating hearts */}
+      {/* Pet button + floating hearts */}
       <div className="relative">
         <motion.button
           onClick={handleButtonClick}
@@ -234,10 +256,10 @@ const PetTheDog = () => {
           whileTap={{ scale: 0.9 }}
           disabled={zoomies}
         >
-          {zoomies ? "ZOOMIES! 🏃‍♂️💨" : "PET THE DOG"}
+          {zoomies ? "🦴🦴🦴" : "PET THE DOG"}
           {pawPop && (
             <motion.span
-              className="absolute top-0 left-1/2 text-4xl"
+              className="absolute top-0 left-1/2 text-4xl pointer-events-none"
               initial={{ y: 0, opacity: 1 }}
               animate={{ y: -40, opacity: 0 }}
               transition={{ duration: 0.6 }}
@@ -248,7 +270,6 @@ const PetTheDog = () => {
           )}
         </motion.button>
 
-        {/* Floating hearts */}
         <AnimatePresence>
           {hearts.map((h) => (
             <motion.div
@@ -260,13 +281,12 @@ const PetTheDog = () => {
               transition={{ duration: 1 }}
               style={{ translateX: "-50%" }}
             >
-              ❤️
+              💤
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
 
-      {/* Zoomies message */}
       <AnimatePresence>
         {zoomies && (
           <motion.div
@@ -275,7 +295,7 @@ const PetTheDog = () => {
             exit={{ opacity: 0, scale: 0.5 }}
             className="text-amber-400 text-2xl font-black uppercase tracking-widest flex items-center gap-2"
           >
-            <span>🐕</span> ZOOMIE ATTACK! <span>💨</span>
+            <span>🐾</span> Fuck You <span>🐾</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -283,9 +303,14 @@ const PetTheDog = () => {
   );
 };
 
-// ========== MAIN SECTION ==========
+// ─── MAIN SECTION ──────────────────────────────────────────────────
 export default function MaxTheme() {
   const containerRef = useRef(null);
+  const isTouchDevice = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -302,14 +327,18 @@ export default function MaxTheme() {
       className="relative min-h-screen bg-[#030303] text-white overflow-hidden font-sans cursor-none"
       style={{ isolation: "isolate" }}
     >
-      {/* Cursor + trail (visible only over this section) */}
-      <SectionCursor containerRef={containerRef} />
-      <PawTrail containerRef={containerRef} />
+      {/* Custom cursor & trail – hidden on touch devices */}
+      {!isTouchDevice && (
+        <>
+          <SectionCursor containerRef={containerRef} />
+          <PawTrail containerRef={containerRef} />
+        </>
+      )}
 
       {/* Parallax background decorations */}
       <motion.div
-        style={{ y: yBg, scale: scaleBg, rotate: rotateBg }}
-        className="absolute inset-0 pointer-events-none z-0"
+        style={{ y: yBg, scale: scaleBg, rotate: rotateBg, translateZ: 0 }}
+        className="absolute inset-0 pointer-events-none z-0 will-change-transform"
       >
         <div className="text-[25rem] md:text-[35rem] absolute -top-20 -left-20 opacity-[0.03] select-none">
           🐕
