@@ -259,7 +259,7 @@ const TypewriterLine = ({ text, lineIndex, resetTrigger }) => {
 // ---- install commands ----
 const installCommands = [
   { label: "Install compiler", code: "npm install -g fefe-script" },
-  { label: "Add VS Code extension", code: "ext install Shikharx.fefe-script" },
+  { label: "Add VS Code extension", code: "ext install Shikharx.fefe-script-vscode" },
 ];
 
 export default function Language() {
