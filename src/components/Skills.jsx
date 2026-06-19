@@ -14,11 +14,11 @@ const skillsData = [
   {
     id: "01",
     name: "Java",
-    category: "My favourite and Best Programming Language ever",
+    category: "My favourite",
     color: "text-neon-magenta",
     glow: "shadow-[0_0_30px_#f0f]",
     icon: Wand2,
-    desc: "Java the best programming language for me, Thank You Java and Love you 💗",
+    desc: "Thank You Java",
   },
   {
     id: "02",
